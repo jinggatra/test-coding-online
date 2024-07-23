@@ -60,6 +60,9 @@ class CI_DB_mysqli_driver extends CI_DB {
 	 */
 	public $dbdriver = 'mysqli';
 
+	public $failover = array();
+    public $another_property = null; 
+
 	/**
 	 * Compression flag
 	 *

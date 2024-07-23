@@ -8,6 +8,7 @@ class Account extends CI_Controller
         parent::__construct();
         $this->load->model('M_account');
         $this->load->library('session');
+        $this->load->helper('url');
     }
 
     public function index()
