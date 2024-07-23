@@ -88,24 +88,26 @@ class Account extends CI_Controller
 
     public function login()
     {
-        if ($this->input->post()) {
+        $this->load->helper('url');
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $username = $this->input->post('username');
             $password = $this->input->post('password');
-            $account = $this->M_account->authenticate($username, $password);
-            if ($account) {
-                $this->session->set_userdata(array(
-                    'username' => $account['username'],
-                    'role' => $account['role'],
-                    'logged_in' => true
-                ));
+
+            $this->load->model('M_account');
+            $account = $this->M_account->get_account_by_username($username);
+
+            if ($account && password_verify($password, $account['password'])) {
+                $this->session->set_userdata('logged_in', true);
+                $this->session->set_userdata('username', $username);
+                $this->session->set_userdata('role', $account['role']);
                 redirect('account');
             } else {
                 $data['error'] = 'Invalid username or password';
-                $this->load->view('account/login', $data);
             }
-        } else {
-            $this->load->view('account/login');
         }
+
+        $this->load->view('account/login', isset($data) ? $data : NULL);
     }
 
     public function logout()
